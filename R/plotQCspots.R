@@ -28,7 +28,7 @@
 #' 
 #' 
 #' @importFrom rlang sym "!!"
-#' @importFrom SpatialExperiment spatialCoords
+#' @importFrom SpatialExperiment spatialCoords spatialCoordsNames
 #' @importFrom SingleCellExperiment colData
 #' @importFrom ggplot2 ggplot aes geom_point coord_fixed scale_y_reverse
 #'   scale_color_manual ggtitle theme_bw theme element_blank
@@ -49,10 +49,10 @@ plotQCspots <- function(spe,
   discard <- sym(discard)
   
   stopifnot("barcode_id" %in% colnames(colData(spe)))
-  stopifnot("barcode_id" %in% colnames(spatialCoords(spe)))
+  stopifnot("barcode_id" %in% spatialCoordsNames(spe))
   stopifnot(all(colData(spe)$barcode_id == spatialCoords(spe)$barcode_id))
   
-  ix <- which(colnames(spatialCoords(spe)) == "barcode_id")
+  ix <- which(spatialCoordsNames(spe) == "barcode_id")
   df <- cbind(as.data.frame(colData(spe)), as.data.frame(spatialCoords(spe))[, -ix])
   
   p <- ggplot(df, aes(x = !!x_coord, y = !!y_coord, color = !!discard)) + 
